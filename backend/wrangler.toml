@@ -19,3 +19,10 @@ compatibility_date = "2023-12-01"
 
 # [ai]
 # binding = "AI"
+
+name = "backend"
+compatibility_date = "2023-12-01"
+
+[vars]
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMjhkMjRlYTgtOWYwMS00NWRiLTk0ZTctOGM0Yzg1YTg1N2ZhIiwidGVuYW50X2lkIjoiYTg4YmYxNTk3MzAyMzE2OTU4N2QxNjhiN2RlMjQ5Njg3YjQ2YTg0NjgwNzBlZGM5NGFhZDc3YTRkMWMwOGUwZiIsImludGVybmFsX3NlY3JldCI6IjgwMzU2YTlhLWMxMTQtNDg1My1hMjUxLThkNmQ4OWRkOTVhYyJ9.a031AGN6zaM2TNxMkB1n7sL2K__--7FOzoyJn714xhk"
+DIRECT_URL="<YOUR_DATABASE_CONNECTION_STRING>" 
