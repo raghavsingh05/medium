@@ -34,7 +34,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// .wrangler/tmp/bundle-9UWrvy/checked-fetch.js
+// .wrangler/tmp/bundle-Fk3z9k/checked-fetch.js
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
     (typeof request === "string" ? new Request(request, init) : request).url
@@ -52,7 +52,7 @@ function checkURL(request, init) {
 }
 var urls;
 var init_checked_fetch = __esm({
-  ".wrangler/tmp/bundle-9UWrvy/checked-fetch.js"() {
+  ".wrangler/tmp/bundle-Fk3z9k/checked-fetch.js"() {
     "use strict";
     urls = /* @__PURE__ */ new Set();
     globalThis.fetch = new Proxy(globalThis.fetch, {
@@ -6456,8 +6456,8 @@ var require_edge2 = __commonJS({
     if (typeof globalThis !== "undefined" && globalThis["DEBUG"] || typeof process !== "undefined" && process.env && process.env.DEBUG || void 0) {
       Debug2.enable(typeof globalThis !== "undefined" && globalThis["DEBUG"] || typeof process !== "undefined" && process.env && process.env.DEBUG || void 0);
     }
-    var PrismaClient2 = getPrismaClient2(config);
-    exports.PrismaClient = PrismaClient2;
+    var PrismaClient3 = getPrismaClient2(config);
+    exports.PrismaClient = PrismaClient3;
     Object.assign(exports, Prisma);
   }
 });
@@ -6500,7 +6500,7 @@ var require_default_index = __commonJS({
     var default_index_exports = {};
     __export(default_index_exports, {
       Prisma: () => Prisma,
-      PrismaClient: () => PrismaClient2,
+      PrismaClient: () => PrismaClient3,
       default: () => default_index_default
     });
     module.exports = __toCommonJS(default_index_exports);
@@ -6509,7 +6509,7 @@ var require_default_index = __commonJS({
     };
     var version = "5.18.0";
     var clientVersion = version;
-    var PrismaClient2 = class {
+    var PrismaClient3 = class {
       constructor() {
         throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
       }
@@ -6532,11 +6532,23 @@ var require_default_index = __commonJS({
   }
 });
 
-// .wrangler/tmp/bundle-9UWrvy/middleware-loader.entry.ts
+// node_modules/@prisma/client/extension.js
+var require_extension = __commonJS({
+  "node_modules/@prisma/client/extension.js"(exports, module) {
+    init_checked_fetch();
+    init_modules_watch_stub();
+    module.exports = {
+      // https://github.com/prisma/prisma/pull/12907
+      ...require_default_index()
+    };
+  }
+});
+
+// .wrangler/tmp/bundle-Fk3z9k/middleware-loader.entry.ts
 init_checked_fetch();
 init_modules_watch_stub();
 
-// .wrangler/tmp/bundle-9UWrvy/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-Fk3z9k/middleware-insertion-facade.js
 init_checked_fetch();
 init_modules_watch_stub();
 
@@ -8147,7 +8159,9 @@ var Hono2 = class extends Hono {
   }
 };
 
-// src/index.ts
+// src/routes/user.ts
+init_checked_fetch();
+init_modules_watch_stub();
 var import_edge = __toESM(require_edge3());
 
 // node_modules/@prisma/extension-accelerate/dist/esm/entry.fetch.js
@@ -8801,26 +8815,15 @@ var verify2 = Jwt.verify;
 var decode2 = Jwt.decode;
 var sign2 = Jwt.sign;
 
-// src/index.ts
-var app = new Hono2();
-app.use("/api/v1/blog/*", async (c, next) => {
-  const header = c.req.header("authorization") || "";
-  const token = header.split(" ")[1];
-  const response = await verify2(header, c.env.JWT_SECRET);
-  if (response.id) {
-    next();
-  } else {
-    c.status(403);
-    return c.json({ error: "unauthorized" });
-  }
-});
-app.get("/", async (c) => {
+// src/routes/user.ts
+var userRouter = new Hono2();
+userRouter.get("/", async (c) => {
   const prisma = new import_edge.PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
   }).$extends(withAccelerate());
   return c.text("Hare Krishna!");
 });
-app.post("/api/v1/signup", async (c) => {
+userRouter.post("/api/v1/signup", async (c) => {
   const prisma = new import_edge.PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL
   }).$extends(withAccelerate());
@@ -8839,7 +8842,7 @@ app.post("/api/v1/signup", async (c) => {
     return c.json({ error: "error while signing up" });
   }
 });
-app.post("/api/v1/user/signin", async (c) => {
+userRouter.post("/api/v1/user/signin", async (c) => {
   const prisma = new import_edge.PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL
   }).$extends(withAccelerate());
@@ -8857,15 +8860,95 @@ app.post("/api/v1/user/signin", async (c) => {
   const jwt2 = await sign2({ id: user.id }, c.env.JWT_SECRET);
   return c.json({ jwt: jwt2 });
 });
-app.post("/api/v1/blog", (c) => {
-  return c.text("hello bro");
+
+// src/routes/blog.ts
+init_checked_fetch();
+init_modules_watch_stub();
+var import_extension2 = __toESM(require_extension());
+var blogRouter = new Hono2();
+blogRouter.use("/*", async (c, next) => {
+  const authHeader = c.req.header("authorization") || "";
+  const user = await verify2(authHeader, c.env.JWT_SECRET);
+  if (user) {
+    c.set("userId", user.id);
+    next();
+  } else {
+    c.status(403);
+    return c.json({
+      message: "You are not logged in"
+    });
+  }
 });
-app.put("/api/v1/blog", (c) => {
-  return c.text("hello bro");
+blogRouter.post("/", async (c) => {
+  const body = await c.req.json();
+  const prisma = new import_extension2.PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate());
+  const blog = await prisma.blog.create({
+    data: {
+      title: body.title,
+      content: body.content,
+      authorId: 1
+    }
+  });
+  return c.json({
+    id: blog.id
+  });
 });
-app.get("/api/v1/blog/:id", (c) => {
-  return c.text("hello bro");
+blogRouter.put("/", async (c) => {
+  const body = await c.req.json();
+  const prisma = new import_extension2.PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate());
+  const blog = await prisma.blog.update({
+    where: {
+      id: body.id
+    },
+    data: {
+      title: body.title,
+      content: body.content
+    }
+  });
+  return c.json({
+    id: blog.id
+  });
 });
+blogRouter.get("/", async (c) => {
+  const body = await c.req.json();
+  const prisma = new import_extension2.PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate());
+  try {
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: body.id
+      }
+    });
+    return c.json({
+      blog
+    });
+  } catch (e) {
+    c.status(411);
+    return c.json({
+      message: "Error while fetching blog post"
+    });
+  }
+});
+blogRouter.get("/bulk", async (c) => {
+  const body = await c.req.json();
+  const prisma = new import_extension2.PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate());
+  const blogs = await prisma.blog.findMany();
+  return c.json({
+    blogs
+  });
+});
+
+// src/index.ts
+var app = new Hono2();
+app.route("/api/v1/user", userRouter);
+app.route("/api/v1/blog", blogRouter);
 var src_default = app;
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
@@ -8912,7 +8995,7 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-9UWrvy/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-Fk3z9k/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   ...void 0 ?? [],
   middleware_ensure_req_body_drained_default,
@@ -8944,7 +9027,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   ]);
 }
 
-// .wrangler/tmp/bundle-9UWrvy/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-Fk3z9k/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
