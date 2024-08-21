@@ -23,7 +23,6 @@ userRouter.post('/signup', async (c) => {
         password: body.password,
       },
     });
-  
     const token = await sign({ id: user.id }, c.env.JWT_SECRET)
   
     return c.json({
@@ -33,7 +32,6 @@ userRouter.post('/signup', async (c) => {
   
 userRouter.post('/signin', async (c) => {
     const prisma = new PrismaClient({
-    //@ts-ignore
         datasourceUrl: c.env?.DATABASE_URL	,
     }).$extends(withAccelerate());
 
