@@ -34,7 +34,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// .wrangler/tmp/bundle-Fk3z9k/checked-fetch.js
+// .wrangler/tmp/bundle-b3HzvQ/checked-fetch.js
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
     (typeof request === "string" ? new Request(request, init) : request).url
@@ -52,7 +52,7 @@ function checkURL(request, init) {
 }
 var urls;
 var init_checked_fetch = __esm({
-  ".wrangler/tmp/bundle-Fk3z9k/checked-fetch.js"() {
+  ".wrangler/tmp/bundle-b3HzvQ/checked-fetch.js"() {
     "use strict";
     urls = /* @__PURE__ */ new Set();
     globalThis.fetch = new Proxy(globalThis.fetch, {
@@ -6544,11 +6544,11 @@ var require_extension = __commonJS({
   }
 });
 
-// .wrangler/tmp/bundle-Fk3z9k/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-b3HzvQ/middleware-loader.entry.ts
 init_checked_fetch();
 init_modules_watch_stub();
 
-// .wrangler/tmp/bundle-Fk3z9k/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-b3HzvQ/middleware-insertion-facade.js
 init_checked_fetch();
 init_modules_watch_stub();
 
@@ -8817,33 +8817,25 @@ var sign2 = Jwt.sign;
 
 // src/routes/user.ts
 var userRouter = new Hono2();
-userRouter.get("/", async (c) => {
+userRouter.post("/signup", async (c) => {
   const prisma = new import_edge.PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
   }).$extends(withAccelerate());
-  return c.text("Hare Krishna!");
-});
-userRouter.post("/api/v1/signup", async (c) => {
-  const prisma = new import_edge.PrismaClient({
-    datasourceUrl: c.env?.DATABASE_URL
-  }).$extends(withAccelerate());
   const body = await c.req.json();
-  try {
-    const user = await prisma.user.create({
-      data: {
-        email: body.email,
-        password: body.password
-      }
-    });
-    const jwt2 = await sign2({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({ jwt: jwt2 });
-  } catch (e) {
-    c.status(403);
-    return c.json({ error: "error while signing up" });
-  }
+  const user = await prisma.user.create({
+    data: {
+      email: body.email,
+      password: body.password
+    }
+  });
+  const token = await sign2({ id: user.id }, c.env.JWT_SECRET);
+  return c.json({
+    jwt: token
+  });
 });
-userRouter.post("/api/v1/user/signin", async (c) => {
+userRouter.post("/signin", async (c) => {
   const prisma = new import_edge.PrismaClient({
+    //@ts-ignore
     datasourceUrl: c.env?.DATABASE_URL
   }).$extends(withAccelerate());
   const body = await c.req.json();
@@ -8881,6 +8873,7 @@ blogRouter.use("/*", async (c, next) => {
 });
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
+  const authorId = c.get("userId");
   const prisma = new import_extension2.PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
   }).$extends(withAccelerate());
@@ -8888,7 +8881,7 @@ blogRouter.post("/", async (c) => {
     data: {
       title: body.title,
       content: body.content,
-      authorId: 1
+      authorId: Number(authorId)
     }
   });
   return c.json({
@@ -8948,7 +8941,7 @@ blogRouter.get("/bulk", async (c) => {
 // src/index.ts
 var app = new Hono2();
 app.route("/api/v1/user", userRouter);
-app.route("/api/v1/blog", blogRouter);
+app.route("/api/v1/book", blogRouter);
 var src_default = app;
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
@@ -8995,7 +8988,7 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-Fk3z9k/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-b3HzvQ/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   ...void 0 ?? [],
   middleware_ensure_req_body_drained_default,
@@ -9027,7 +9020,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   ]);
 }
 
-// .wrangler/tmp/bundle-Fk3z9k/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-b3HzvQ/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -9120,6 +9113,7 @@ if (typeof middleware_insertion_facade_default === "object") {
 var middleware_loader_entry_default = WRAPPED_ENTRY;
 export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
+  app,
   middleware_loader_entry_default as default
 };
 //# sourceMappingURL=index.js.map
