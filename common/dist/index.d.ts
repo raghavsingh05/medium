@@ -35,15 +35,15 @@ export declare const createBlogInput: z.ZodObject<{
 export declare const updateBlogInput: z.ZodObject<{
     title: z.ZodString;
     content: z.ZodString;
-    id: z.ZodString;
+    id: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     title: string;
     content: string;
-    id: string;
+    id?: string | undefined;
 }, {
     title: string;
     content: string;
-    id: string;
+    id?: string | undefined;
 }>;
 export type SignupInput = z.infer<typeof signupInput>;
 export type SigninInput = z.infer<typeof signinInput>;
