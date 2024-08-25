@@ -14,7 +14,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     });
     async function sendRequests(){
         try{
-            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type=== "signup"? "signup": "signin"}`);
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type=== "signup"? "signup": "signin"}`, postInputs);
             const jwt = response.data;
             localStorage.setItem("token", jwt);
             navigate("/blogs");
@@ -37,26 +37,26 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
             </div>
             <div className="flex justify-center">
                 <div className="min-w-96">
-
-                <LableInput label="Username" placeholder="Raghav" onChange={(e) => {
-                    setPostInputs({
-                        ...postInputs,
-                        name: e.target.value
-                    })
-                }} />
-                {type === "signin"? <LableInput label="Email" placeholder="ragha@gmail.com" onChange={(e) => {
+                {type === "signup"? <LableInput label="Username" placeholder="Raghav" onChange={(e) => {
                     setPostInputs({
                         ...postInputs,
                         name: e.target.value
                     })
                 }} />: null }
+                <LableInput label="Email" placeholder="Raghav@gmail.xom" onChange={(e) => {
+                    setPostInputs({
+                        ...postInputs,
+                        username: e.target.value
+                    })
+                }} />
+                
                 <LableInput label="Password" type="password" placeholder="12345" onChange={(e) => {
                     setPostInputs({
                         ...postInputs,
-                        name: e.target.value
+                        password: e.target.value
                     })
                 }} />
-                <button type="submit" className="text-white min-w-96 mt-5 bg-slate-900 hover:bg-slate-800 focus:ring-2 focus:outline-none focus:ring-slate-700 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">{type === "signup" ? "Sign Up" : " Sign In"}</button>
+                <button onClick={sendRequests} type="submit" className="text-white min-w-96 mt-5 bg-slate-900 hover:bg-slate-800 focus:ring-2 focus:outline-none focus:ring-slate-700 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">{type === "signup" ? "Sign Up" : " Sign In"}</button>
                 </div>
             </div>
         </div>
