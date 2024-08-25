@@ -1,19 +1,27 @@
 import { SignupInput } from "@raghavsingh05/medium-common";
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Signup } from "./Signup";
 import  axios  from "axios";
 import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
-
+    const navigate = useNavigate();
     const [postInputs, setPostInputs] = useState<SignupInput>({
         name: "",
         username: "",
         password: ""
     });
     async function sendRequests(){
-        const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`)
+        try{
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type=== "signup"? "signup": "signin"}`);
+            const jwt = response.data;
+            localStorage.setItem("token", jwt);
+            navigate("/blogs");
+
+        } catch(err){
+
+        }
     }
     return <div className=" h-screen flex justify-center flex-col">
         <div className=" text-center">
@@ -36,12 +44,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
                         name: e.target.value
                     })
                 }} />
-                <LableInput label="Email" placeholder="ragha@gmail.com" onChange={(e) => {
+                {type === "signin"? <LableInput label="Email" placeholder="ragha@gmail.com" onChange={(e) => {
                     setPostInputs({
                         ...postInputs,
                         name: e.target.value
                     })
-                }} />
+                }} />: null }
                 <LableInput label="Password" type="password" placeholder="12345" onChange={(e) => {
                     setPostInputs({
                         ...postInputs,
