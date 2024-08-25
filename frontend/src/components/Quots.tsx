@@ -9,7 +9,7 @@ export const Quote = () => {
           </div>
 
           <div className=" max-w-md  text-xl pt-3">Julies Winfield</div>
-          <div className=" max-w-md text-sm font-normal">Julies Winfield
+          <div className=" max-w-md text-sm font-normal">CEO, Acme Inc
           </div>
         </div>
       </div>
