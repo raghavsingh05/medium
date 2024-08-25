@@ -2,6 +2,8 @@ import { SignupInput } from "@raghavsingh05/medium-common";
 import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Signup } from "./Signup";
+import  axios  from "axios";
+import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
@@ -9,7 +11,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         name: "",
         username: "",
         password: ""
-    })
+    });
+    async function sendRequests(){
+        const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`)
+    }
     return <div className=" h-screen flex justify-center flex-col">
         <div className=" text-center">
             <div className=" flex justify-center">
