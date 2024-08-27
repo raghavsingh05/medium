@@ -15,8 +15,19 @@ export const BlogCard = ({
     publishedDate }: BlogCardsProps
 ) => {
     return <div>
-        <div className=" my-3 font-medium">
-            <Avatar name={authorName} />{authorName} . {publishedDate}
+        <div className=" flex my-4"  >
+            <div className="flex justify-center flex-col">
+                <Avatar name={authorName} />
+            </div>
+            <div className=" font-normal text-slate-900 mr-2"> 
+                {authorName}
+            </div>
+            <div className="flex justify-center flex-col pr-2">
+                <Circle />
+            </div>
+            <div className="font-extralight text-slate-500">
+                {publishedDate}
+            </div> 
         </div>
         <div>
             {title}
@@ -32,6 +43,12 @@ export const BlogCard = ({
         </div>
     </div>
 
+}
+
+function Circle (){
+    return <div className=" h-1 w-1 rounded-full bg-slate-400">
+
+    </div>
 }
 
 function Avatar({ name }: { name: string }) {
