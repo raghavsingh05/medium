@@ -1,5 +1,5 @@
 import { Quote } from "../components/Quots"
-import { Auth } from "./Auth"
+import { Auth } from "../components/Auth"
 
 
 export const Signup = () => {
