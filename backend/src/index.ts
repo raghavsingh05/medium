@@ -8,6 +8,14 @@ export const app = new Hono<{
       JWT_SECRET: string;
   }
 }>();
+const corsOptions = {
+  origin: 'http://localhost:5173', // Replace with your frontend's domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // If you need to support credentials
+};
+
+app.use(cors(corsOptions));
 app.use('/*', cors())
 app.route('/api/v1/user', userRouter)
 app.route('/api/v1/blog', blogRouter)

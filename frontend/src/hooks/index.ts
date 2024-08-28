@@ -5,15 +5,19 @@ import { BACKEND_URL } from "../config";
 
 export const useBlogs = () =>{
     const [loading, setLoading] = useState(true);
-    const [blogs, setBLogs] = useState([]);
+    const [blogs, setBlogs] = useState([]);
 
-    useEffect (()=>{
-        const response = axios.get(`${BACKEND_URL}/api/v1/bulk`)
-        .then(response =>{
-            setBLogs(response.data);
-            setLoading(false);
-        })
-    }, [])
+    useEffect(() => {
+            axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                }
+            })
+                .then(response => {
+                    setBlogs(response.data.blogs);
+                    setLoading(false);
+                })
+        }, [])
 
     return {
         loading,
