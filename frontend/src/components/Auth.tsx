@@ -12,15 +12,14 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         password: ""
     });
     async function sendRequests(){
-        try{
-            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type=== "signup"? "signup": "signin"}`, postInputs);
-            const jwt = response.data.jwt;
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInputs);
+            const jwt = response.data;
             localStorage.setItem("token", jwt);
             navigate("/blogs");
-
-        } catch(err){
-            console.error("Error during sign-in/sign-up:", err);
-            alert("Failed to log in. Please check your credentials and try again.");
+        } catch(e) {
+            alert("Error while signing up")
+            // alert the user here that the request failed
         }
     }
     return <div className=" h-screen flex justify-center flex-col">
