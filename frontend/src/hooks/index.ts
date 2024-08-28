@@ -41,19 +41,19 @@ export const useBlogs = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+      axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+          headers: {
+              Authorization: localStorage.getItem("token")
+          }
       })
-      .then((response) => {
-        setBlogs(response.data.blogs);
-        setLoading(false);
-      });
-  }, []);
+          .then(response => {
+              setBlogs(response.data.blogs);
+              setLoading(false);
+          })
+  }, [])
 
   return {
-    loading,
-    blogs,
-  };
-};
+      loading,
+      blogs
+  }
+}
