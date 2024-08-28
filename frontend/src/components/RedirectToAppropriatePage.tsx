@@ -10,7 +10,7 @@ function RedirectToAppropriatePage() {
         if (token) {
             navigate('/blogs');
         } else {
-            navigate('/signin');
+            navigate('/signup');
         }
     }, [navigate]);
 
