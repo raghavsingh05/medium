@@ -9,7 +9,7 @@ export const app = new Hono<{
   }
 }>();
 const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with your frontend's domain
+  origin: 'https://medium-zeta-one.vercel.app', // Replace with your frontend's domain
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // If you need to support credentials
